@@ -20,12 +20,12 @@ nav a{font-size:13px;padding:5px 12px;border-radius:99px;color:var(--mute)}nav a
 @media(max-width:700px){nav a:nth-child(n+5){display:none}}
 /* build state */
 .b{position:relative}
-.b>*{transition:opacity .5s,translate .8s cubic-bezier(.2,.8,.2,1)}
+.b>*{transition:opacity .3s,translate .45s cubic-bezier(.2,.8,.2,1)}
 .b:not(.on)>*{opacity:0;translate:0 28px}
 .b:not(.on):after{content:'';position:absolute;inset:0;border:1px solid #6ea0ff;background:#ffffff1c;border-radius:4px}
 .b:not(.on):before{content:attr(data-dim);position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);z-index:2;background:#4d7cff;color:#fff;font:600 10px var(--m);padding:1px 6px;border-radius:3px;white-space:nowrap}
 .sel{position:fixed;z-index:49;border:1.5px solid #6ea0ff;background:#6ea0ff14;pointer-events:none}
-.ag{position:fixed;left:0;top:0;z-index:50;pointer-events:none;display:flex;gap:2px;will-change:transform}
+.ag{opacity:0;transition:opacity .25s;position:fixed;left:0;top:0;z-index:50;pointer-events:none;display:flex;gap:2px;will-change:transform}
 .ag svg,.sp svg{width:16px;height:16px;fill:var(--c);filter:drop-shadow(0 0 6px var(--c))}
 .ag b,.ag i{font:600 10px var(--m);padding:1px 6px;border-radius:3px;margin-top:13px;height:17px;white-space:nowrap}
 .ag b{background:var(--c);color:#000}.ag i{background:#000c;color:#fff;font-style:normal;display:none}.ag.w2 i{display:block}
@@ -251,16 +251,17 @@ SOCIALS.forEach(s=>$('#soc').append(H('a','btn g',s.label)));$('#soc').querySele
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,AR='<svg viewBox="0 0 16 16"><path d="M1 1l5 14 2.2-5.8L14 7z"/></svg>';
 const AG=[['Arjun','#a3ff12'],['Priya','#4d7cff'],['Meera','#ff8a1f'],['Vikram','#b36bff'],['Anaya','#ffc21a'],['Rohan','#2dff9a'],['Isha','#ff4fa3'],['Kabir','#22d3ee']];
 const ags=RM?[]:AG.slice(0,innerWidth<700?5:8).map(([n,c])=>{const e=H('div','ag',AR+'<b>'+n+'</b><i></i>');e.style.setProperty('--c',c);document.body.append(e);return{e,x:Math.random()*innerWidth,y:Math.random()*innerHeight,tx:0,ty:0,n:0,busy:0}});
-(function L(t){ags.forEach(a=>{if(!a.busy&&t>a.n){a.tx=Math.random()*innerWidth;a.ty=Math.random()*innerHeight;a.n=t+1500+Math.random()*2500}a.x+=(a.tx-a.x)*.05;a.y+=(a.ty-a.y)*.05;a.e.style.transform='translate('+a.x+'px,'+a.y+'px)'});requestAnimationFrame(L)})(0);
+let lsc=0;addEventListener('scroll',()=>lsc=performance.now(),{passive:true});
+(function L(t){const sc=t-lsc<450;ags.forEach(a=>{a.e.style.opacity=sc||a.busy?1:0;if(!a.busy&&sc&&t>a.n){a.tx=Math.random()*innerWidth;a.ty=Math.random()*innerHeight;a.n=t+400+Math.random()*600}a.x+=(a.tx-a.x)*.18;a.y+=(a.ty-a.y)*.18;a.e.style.transform='translate('+a.x+'px,'+a.y+'px)'});requestAnimationFrame(L)})(0);
 const ST=['selecting','editing content','laying out','writing copy'];let q=0;
 function build(el){const r0=el.getBoundingClientRect();el.dataset.dim=Math.round(r0.width)+' × '+Math.round(r0.height);
-const a=ags.find(a=>!a.busy)||ags[0],d=Math.min(q++,6)*350;setTimeout(()=>q=Math.max(0,q-1),900);
+const a=ags.find(a=>!a.busy)||ags[0],d=Math.min(q++,5)*70;setTimeout(()=>q=Math.max(0,q-1),250);
 setTimeout(()=>{const r=el.getBoundingClientRect();a.busy=1;a.tx=r.left+r.width*(.2+Math.random()*.5);a.ty=r.top+r.height*.55;a.e.classList.add('w2');a.e.lastChild.textContent=ST[Math.random()*4|0];
 const s=H('div','sel');Object.assign(s.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});document.body.append(s);
-setTimeout(()=>{el.classList.add('on');s.remove()},900);setTimeout(()=>{a.busy=0;a.e.classList.remove('w2')},1500)},d+500)}
-const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){io.unobserve(x.target);build(x.target)}}),{threshold:.2});
+setTimeout(()=>{el.classList.add('on');s.remove()},320);setTimeout(()=>{a.busy=0;a.e.classList.remove('w2')},700)},d+30)}
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){io.unobserve(x.target);build(x.target)}}),{threshold:.08});
 const startB=()=>document.querySelectorAll('.b').forEach(el=>ags.length?io.observe(el):el.classList.add('on'));
-setTimeout(()=>document.querySelectorAll('.b:not(.on)').forEach(e=>{if(e.getBoundingClientRect().top<innerHeight)e.classList.add('on')}),6000);
+setTimeout(()=>document.querySelectorAll('.b:not(.on)').forEach(e=>{if(e.getBoundingClientRect().top<innerHeight)e.classList.add('on')}),2500);
 /* swirl */
 const S=$('#swirl'),P=[];for(let i=0;i<42;i++){const e=H('div','sp',AR);e.style.setProperty('--c',AG[i%8][1]);S.append(e);const y=1-2*(i+.5)/42,r=Math.sqrt(1-y*y),t=i*2.399963;P.push({e,x:Math.cos(t)*r,y,z:Math.sin(t)*r})}
 let A=0;(function F(){A+=.006;const ca=Math.cos(A),sa=Math.sin(A),w=S.clientWidth,R=w*.42;P.forEach(p=>{const z=-p.x*sa+p.z*ca,x=p.x*ca+p.z*sa;p.e.style.transform='translate('+(w/2+x*R)+'px,'+(w/2+p.y*R)+'px) scale('+(.6+.5*(z+1)/2)+')';p.e.style.opacity=.35+.65*(z+1)/2});if(!RM)requestAnimationFrame(F)})();
