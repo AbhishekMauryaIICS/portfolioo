@@ -86,7 +86,18 @@ footer{text-align:center;padding:0 24px 40px;font-size:13px;color:var(--mute)}
 .tk div{animation:none}.d,.row h3{will-change:transform}.big{will-change:transform}
 .row{transition:background .3s,padding .3s}.row:hover{background:#ffffff08;padding-left:18px}
 .ac .feat{display:grid;grid-template-columns:minmax(120px,200px) 1fr;gap:24px;align-items:center;padding:20px 0}.ac .feat img{width:100%;border-radius:12px;border:1px solid var(--line)}.ac .feat h3{font:italic 400 clamp(24px,3vw,36px)/1.05 var(--d);text-transform:uppercase;margin-bottom:6px}.ac .feat>div{display:block;border:0;padding:0}
-</style></head><body>
+body.lk{overflow:hidden}
+#ld{position:fixed;inset:0;z-index:100;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:transform .9s cubic-bezier(.7,0,.2,1)}
+#ld.out{transform:translateY(-100%)}
+#lo{position:relative;width:260px;height:260px;display:grid;place-items:center}
+.orb{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;font:italic 400 42px var(--d);background:radial-gradient(circle at 35% 30%,#ff5a4d,#b3070f 70%);box-shadow:0 0 60px #e5141c99,0 0 140px #e5141c55;animation:pl 1.4s ease-in-out infinite}
+@keyframes pl{50%{transform:scale(1.08)}}
+#lo .rg{position:absolute;inset:0;animation:sp 3.2s linear infinite}#lo .rg.r2{animation-duration:5s;animation-direction:reverse}@keyframes sp{to{transform:rotate(360deg)}}
+#lo .sp{left:50%;top:50%;margin:-9px}
+#ln{font:italic 400 clamp(40px,8vw,72px)/1 var(--d)}
+#lt{min-height:16px}
+#ld:after{content:'';position:absolute;left:0;bottom:0;height:3px;width:var(--p,0%);background:var(--red);box-shadow:0 0 14px var(--red)}
+</style></head><body class="lk"><div id="ld"><div id="lo"><div class="orb">AM</div></div><p id="lt" class="tag"></p><p id="ln">0%</p></div>
 <nav><i></i><a href="#top">Home</a><a href="#about">About</a><a href="#work">Work</a><a href="#projects">Projects</a><a href="#toolkit">Toolkit</a><a href="#contact">Contact</a></nav>
 <main id="top">
 <section class="hero"><div class="big" aria-hidden="true">PORTFOLIO</div><div class="floor"></div>
@@ -248,12 +259,19 @@ setTimeout(()=>{const r=el.getBoundingClientRect();a.busy=1;a.tx=r.left+r.width*
 const s=H('div','sel');Object.assign(s.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});document.body.append(s);
 setTimeout(()=>{el.classList.add('on');s.remove()},900);setTimeout(()=>{a.busy=0;a.e.classList.remove('w2')},1500)},d+500)}
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){io.unobserve(x.target);build(x.target)}}),{threshold:.2});
-document.querySelectorAll('.b').forEach(el=>ags.length?io.observe(el):el.classList.add('on'));
+const startB=()=>document.querySelectorAll('.b').forEach(el=>ags.length?io.observe(el):el.classList.add('on'));
 setTimeout(()=>document.querySelectorAll('.b:not(.on)').forEach(e=>{if(e.getBoundingClientRect().top<innerHeight)e.classList.add('on')}),6000);
 /* swirl */
 const S=$('#swirl'),P=[];for(let i=0;i<42;i++){const e=H('div','sp',AR);e.style.setProperty('--c',AG[i%8][1]);S.append(e);const y=1-2*(i+.5)/42,r=Math.sqrt(1-y*y),t=i*2.399963;P.push({e,x:Math.cos(t)*r,y,z:Math.sin(t)*r})}
 let A=0;(function F(){A+=.006;const ca=Math.cos(A),sa=Math.sin(A),w=S.clientWidth,R=w*.42;P.forEach(p=>{const z=-p.x*sa+p.z*ca,x=p.x*ca+p.z*sa;p.e.style.transform='translate('+(w/2+x*R)+'px,'+(w/2+p.y*R)+'px) scale('+(.6+.5*(z+1)/2)+')';p.e.style.opacity=.35+.65*(z+1)/2});if(!RM)requestAnimationFrame(F)})();
 
+/* loader */
+history.scrollRestoration='manual';scrollTo(0,0);
+const ld=$('#ld'),LS=['Arjun is laying out the hero','Priya is writing the copy','Meera is wiring the data','Vikram is hardening security','Anaya is polishing the motion'];
+function lend(){document.body.classList.remove('lk');ld.classList.add('out');setTimeout(()=>{ld.remove();startB()},850)}
+if(RM){ld.remove();document.body.classList.remove('lk');startB()}else{
+[[8,82,'rg'],[5,118,'rg r2']].forEach(([n,R,c])=>{const g=H('div',c);for(let i=0;i<n;i++){const a=i*360/n,e=H('div','sp',AR);e.style.setProperty('--c',AG[(i+n)%8][1]);e.style.transform='rotate('+a+'deg) translate('+R+'px) rotate('+(-a)+'deg)';g.append(e)}$('#lo').append(g)});
+const t0=performance.now();(function P(t){const k=Math.min((t-t0)/2400,1),v=Math.round(100*(1-Math.pow(1-k,2.2)));$('#ln').textContent=v+'%';ld.style.setProperty('--p',v+'%');$('#lt').textContent=LS[Math.min(k*5|0,4)];if(k<1)requestAnimationFrame(P);else{$('#lt').textContent='All agents ready';setTimeout(lend,350)}})(t0)}
 /* scroll motion */
 const pb=H('div','pb');document.body.append(pb);
 const bigE=$('.big'),phI=$('.ph img'),flr=$('.floor'),nm=$('.nm'),qE=$('.q'),tkE=$('#tk'),sk=document.querySelectorAll('.d,.row h3');
