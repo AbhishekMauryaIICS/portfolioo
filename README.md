@@ -2,7 +2,7 @@
 
 A single-file portfolio website that **builds itself in front of the visitor**. As you scroll, a team of named agent cursors flies to each block, draws a selection box, and fills the section with content.
 
-**Live site:** https://your-site.vercel.app  <!-- replace with your Vercel URL -->
+**Live site:** [https://your-site.vercel.app](https://portfolioo-fawn-two.vercel.app/)  <!-- replace with your Vercel URL -->
 
 ## Highlights
 
